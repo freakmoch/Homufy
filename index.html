@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>doushite madoka</title>
+
+<!--script src="http://static.tumblr.com/xmajouj/rECn3fyvd/homulicious.js"></script-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+	
+	var homufy_count = 0;
+	
+	var windowHeight = 0;
+	var windowWidth = 0;
+
+	var db = "https://dl.dropboxusercontent.com/u/28395302/hameru/";
+		
+	var homuras = [
+		"avatar_be14cb6e8ae7_128.png",
+		"gfdgdfgdfg.png",
+		"tumblr_inline_mxh5uaXs5b1reyqvx.gif",
+		"tumblr_inline_mxl4jzxjZt1reyqvx.gif",
+		"tumblr_inline_mxl4k7Q6ln1reyqvx.gif",
+		"tumblr_inline_mxl51kkDYk1reyqvx.gif",
+		"tumblr_inline_mxqr0kAXSI1r21bz8.png",
+		"tumblr_inline_mz6lizmmi61rhrvt4.png",
+		"tumblr_inline_mzd9lwhami1s7i3b2.jpg",
+		"tumblr_m7dvmuXNQ11ryg654o1_500.jpg",
+		"tumblr_mpp1jzD9Dg1qm5kz7o1_500.png",
+		"tumblr_mvchs5cfkl1roj91ko1_1280.png",
+		"tumblr_mwg4lmnvao1sy8iyso1_500.png",
+		"tumblr_mx5gpgmU3y1shv6qqo1_400.png",
+		"tumblr_mx5leqmTYq1shv6qqo4_400.png",
+		"tumblr_mx5leqmTYq1shv6qqo8_400.png",
+		"tumblr_mxh2aeRUVn1s44sqco1_500.png",
+		"tumblr_mxkfkkr1zr1shc3j4o2_1280.png",
+		"tumblr_mxwxbtfo7q1qeipluo1_500.png",
+		"tumblr_mxza6lfrsu1si30aao1_500.png",
+		"tumblr_my4i2iyuru1sg18eeo1_500.png",
+		"tumblr_mymez8pOwx1rmuweto1_500.gif",
+		"tumblr_myti0tSQUS1rdo6zeo1_500.png",
+		"tumblr_mzk5p56eR91sjwhj0o1_500.png",
+		"tumblr_mzxg1vHml51t1gh90o2_1280.png",
+		"tumblr_n37r6h6hHu1qatjtso1_500.png",
+		"tumblr_static_tumblr_inline_mhniajtawg1qz4rgp.gif",
+		"tumblr_static_tumblr_mwlge3kzsq1sqri4do1_r3_500.png",
+		"tumblr_static_tumblr_mwlge3kzsq1sqri4do1_r3_500.png"
+		
+	];
+	
+	// lets preload images
+	var imgLoad = new Image();
+		
+	for( var j = 0 ; j < homuras.length; j++ ) { imgLoad.src = "" + db + homuras[j]; }
+	
+	console.log('Done. ' + j + ' images loaded into cache.');
+	
+
+	
+	$( document ).ready(function() {
+			
+		windowHeight = $( window ).height();
+		windowWidth = $( window ).width();
+			
+		console.log('Resolution: ' + windowHeight + "x" + windowWidth );
+		
+		setInterval(function() {
+			$( "#homufy" )
+				.fadeOut(200)
+				.queue(function() { $(this).remove(); });
+			}, 1000);
+
+		$( "#homufyStart" ).click(function() {
+		
+			console.log("!");
+						
+			homufy_count++;
+			
+			var div = document.createElement('div'); div.id = "homufy";
+			div.style.position = 'fixed';
+			
+			var numType = 'px';
+			var heightRandom = Math.random()*.75;
+			var height = 0;
+			var width = 0;
+			var de = document.documentElement;
+
+			if (typeof(window.innerHeight) == 'number') {
+				windowHeight = window.innerHeight;
+				windowWidth = window.innerWidth;
+			} 
+			else if(de && de.clientHeight) {
+				windowHeight = de.clientHeight;
+				windowWidth = de.clientWidth;
+			} 
+			else {
+				numType = '%';
+				height = Math.round( height*100 )+'%';
+			}
+			
+			//div.onclick = homufy_add;
+			div.style.zIndex = -10;
+			div.style.outline = 0;
+			
+			if( homufy_count==15 ) {
+				div.style.top = Math.max( 0, Math.round( (windowHeight-530)/2 ) )  + 'px';
+				div.style.left = Math.round( (windowWidth-530)/2 ) + 'px';
+				div.style.zIndex = -5;
+			} else {
+				if( numType=='px' ) div.style.top = Math.round( windowHeight*heightRandom ) + numType;
+				else div.style.top = height;
+				div.style.left = Math.round( Math.random()*100 ) + '%';
+			}
+
+			
+			////////////////////////////////////////////
+			// CREATES IMAGES
+			
+			var img = document.createElement('img');
+			var currentTime = new Date();
+			var submitTime = currentTime.getTime();
+			var rNG = Math.floor( Math.random()*homuras.length);
+			var imgurl = "" + db + homuras[rNG] ;
+			
+			if(imgurl == "" + db + "undefined") { 
+				console.log("Entropy!");
+				imgurl == 0 
+			};
+			
+			img.setAttribute('src', imgurl);
+
+			////////////////////////////////////////////
+			
+			var ease = "all .1s linear";
+			div.style.WebkitTransition = ease;
+			div.style.WebkitTransform = "rotate(1deg) scale(1.01,1.01)";
+			div.style.transition = "all .1s linear";
+			div.onmouseover = function() {
+				var size = 1+Math.round(Math.random()*10)/100;
+				var angle = Math.round(Math.random()*20-10);
+				var result = "rotate("+angle+"deg) scale("+size+","+size+")";
+				this.style.transform = result;
+				this.style.WebkitTransform = result;
+			}
+			div.onmouseout = function() {
+				var size = .9+Math.round(Math.random()*10)/100;
+				var angle = Math.round(Math.random()*6-3);
+				var result = "rotate("+angle+"deg) scale("+size+","+size+")";
+				this.style.transform = result;	
+				//this.style['-webkit-transform'] = result;
+				//this.style.webkitTransform = result;
+				this.style.WebkitTransform = result;
+				//this.style.MozTransform = result;
+			}
+
+			
+			var body = document.getElementsByTagName('body')[0];
+			body.appendChild(div);
+			div.appendChild(img);	
+			
+		});
+		
+	});
+	
+	
+</script>
+
+</head>
+<body>
+<center style="margin-top: 15%;">
+<p>
+<a href="#homu" style="z-index: 999;" id="homufyStart">
+<img src="https://31.media.tumblr.com/22609efa32309cd0182015273b100a2c/tumblr_inline_n3fxve7BHs1saf9s0.png">
+</a>
+</p>
+
+<p id="error"></p>
+
+<p style="font-face: verdana; font-size: 13px;">
+based off of <a href="http://sol--lux.tumblr.com/komaedafy">komaedafy</a>
+</p>
+
+</center>
+</body>
+</html>
