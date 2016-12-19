@@ -8,14 +8,20 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
+	// originally by sol--lux
+	// optimized a bit by freakmoch
 	
+	// counts
 	var homufy_count = 0;
 	
+	//gotta know how big the window is
 	var windowHeight = 0;
 	var windowWidth = 0;
 
+	//the link to the dropbox folder/directory holding all your images
 	var db = "https://dl.dropboxusercontent.com/u/28395302/hameru/";
-		
+	
+	// all your images
 	var homuras = [
 		"avatar_be14cb6e8ae7_128.png",
 		"gfdgdfgdfg.png",
@@ -60,23 +66,27 @@
 	
 	$( document ).ready(function() {
 			
+		//gets your window height/width
 		windowHeight = $( window ).height();
 		windowWidth = $( window ).width();
 			
 		console.log('Resolution: ' + windowHeight + "x" + windowWidth );
 		
+		//fades out images every second. clicking too much can still flood a page tho
 		setInterval(function() {
 			$( "#homufy" )
 				.fadeOut(200)
 				.queue(function() { $(this).remove(); });
 			}, 1000);
 
+		// let us START THE HELL
 		$( "#homufyStart" ).click(function() {
 		
 			console.log("!");
 						
 			homufy_count++;
 			
+			//creates the div holding the images
 			var div = document.createElement('div'); div.id = "homufy";
 			div.style.position = 'fixed';
 			
@@ -86,6 +96,7 @@
 			var width = 0;
 			var de = document.documentElement;
 
+			// estimates where each picture should go i guess
 			if (typeof(window.innerHeight) == 'number') {
 				windowHeight = window.innerHeight;
 				windowWidth = window.innerWidth;
@@ -103,6 +114,8 @@
 			div.style.zIndex = -10;
 			div.style.outline = 0;
 			
+			
+			// more estimation ft random placement
 			if( homufy_count==15 ) {
 				div.style.top = Math.max( 0, Math.round( (windowHeight-530)/2 ) )  + 'px';
 				div.style.left = Math.round( (windowWidth-530)/2 ) + 'px';
@@ -132,6 +145,7 @@
 
 			////////////////////////////////////////////
 			
+			// cool transitions when you hover over images
 			var ease = "all .1s linear";
 			div.style.WebkitTransition = ease;
 			div.style.WebkitTransform = "rotate(1deg) scale(1.01,1.01)";
@@ -154,7 +168,7 @@
 				//this.style.MozTransform = result;
 			}
 
-			
+			//actually makes the elements
 			var body = document.getElementsByTagName('body')[0];
 			body.appendChild(div);
 			div.appendChild(img);	
