@@ -3,9 +3,15 @@
 <html>
 <head>
 <title>doushite madoka</title>
-
-<!--script src="http://static.tumblr.com/xmajouj/rECn3fyvd/homulicious.js"></script-->
-
+	
+<style>
+	#homufyStart {
+		background: #fff;
+		padding: 15px;
+		border: 5px double #ccc;
+		border-radius: 0 15px;
+	}
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
 	// originally by sol--lux & cornify(?)
@@ -13,6 +19,8 @@
 	
 	// counts
 	var homufy_count = 0;
+	var cooldown = false;
+	var walpurgisnacht = false;
 	
 	//gotta know how big the window is
 	var windowHeight = 0;
@@ -73,18 +81,33 @@
 		console.log('Resolution: ' + windowHeight + "x" + windowWidth );
 		
 		//fades out images every second. clicking too much can still flood a page tho
-		setInterval(function() {
-			$( "#homufy" )
-				.fadeOut(200)
-				.queue(function() { $(this).remove(); });
-			}, 1000);
+		function begoneThot() {
+			if(cooldown == false ) {
+				console.log("this should only run once");
+				setInterval(function() {
+					$( "#homufy" )
+						.fadeOut(200)
+						.queue(function() { $(this).remove(); });
+				}, 1000);
+				cooldown = true;
+			}
+			
+		}
 
 		// let us START THE HELL
 		$( "#homufyStart" ).click(function() {
-		
-			console.log("!");
-						
+			
 			homufy_count++;
+			console.log("heat: " + homufy_count);
+			
+			if (homufy_count > 50) // if to much homura, destroy them.
+				walpurgisnacht = true;
+			if (homufy_count > 1000)
+				alert("Please stop.");
+			
+			if (walpurgisnacht == true)
+				begoneThot(); 
+			
 			
 			//creates the div holding the images
 			var div = document.createElement('div'); div.id = "homufy";
@@ -185,7 +208,7 @@
 <center style="margin-top: 15%;">
 <p>
 <a href="#homu" style="z-index: 999;" id="homufyStart">
-<img src="https://31.media.tumblr.com/22609efa32309cd0182015273b100a2c/tumblr_inline_n3fxve7BHs1saf9s0.png">
+<img src="./img/wtf.png">
 </a>
 </p>
 
