@@ -105,6 +105,9 @@
 		$( "#homufyStart" ).click(function() {
 			
 			homufy_count++;
+			if(homufy_count == 1)
+				$( "#survivalstrategy" ).fadeOut(500).queue(function() { $(this).remove(); });
+			
 			console.log("heat: " + homufy_count);
 			
 			if (homufy_count > 50) // if to much homura, destroy them.
@@ -212,7 +215,7 @@
 
 </head>
 <body>
-<pre style="position: absolute; top: 5px; left 5px;">
+<pre style="position: absolute; top: 5px; left 5px;" id="survivalstrategy">
 Changelog:
 3.0
 + images now stay for 50 clicks, then start to disappear
