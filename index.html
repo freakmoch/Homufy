@@ -2,13 +2,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>doushite madoka v3.0</title>
+<title>doushite madoka v3.1</title>
 	
 <style>
+	html, body {
+		margin: 0; padding: 0;
+		width: 100%;
+		height: 100%;
+		overflow-y: hidden;
+	}
+		
 	html {
-		background: #000;
 		color: #fff;
 		font-family: monospace;
+		background: #000 url('./img/hamus.png') no-repeat;
+		background-size: cover;
+	}
+	
+	body {
 	}
 	
 	#homufyStart img {
@@ -16,6 +27,16 @@
 		padding: 15px;
 		border: 5px double #ccc;
 		border-radius: 0 15px;
+		margin-top: 15%; z-index: 999;
+	}
+	
+	#solvent {
+		position: absolute;
+		margin: 0; padding: 0;
+		z-index: -1;
+		background: rgba(0,0,0,0.5);
+		width: 100%;
+		height: 100%;
 	}
 	
 	a, a:hover, a:active, a:visited { color: #ff0; }
@@ -146,7 +167,7 @@
 			}
 			
 			//div.onclick = homufy_add;
-			div.style.zIndex = -10;
+			div.style.zIndex = -1;
 			div.style.outline = 0;
 			
 			
@@ -217,8 +238,13 @@
 
 </head>
 <body>
-<pre style="position: absolute; top: 5px; left 5px;" id="survivalstrategy">
+<div id="solvent"></div>
+<pre style="position: absolute; top: 5px; padding-left: 20px;" id="survivalstrategy">
 Changelog:
+
+3.1
++ Gave the background a little spice from <a href="http://pastelhomura.tumblr.com">pastelhomura</a>
+
 3.0
 + images now stay for 50 clicks, then start to disappear
 + added css to make the page look nicer.
@@ -234,9 +260,9 @@ Changelog:
 + created Homufy and hosted it on <a href="http://homufy.tumblr.com/">tumblr</a>.
 + just copy-pasted komaedafy and replaced images with homura
 </pre>
-<center style="margin-top: 15%;">
+<center>
 <p>
-<a href="#homu" style="z-index: 999;" id="homufyStart">
+<a href="#homu" id="homufyStart">
 <img src="./img/wtf.png">
 </a>
 </p>
