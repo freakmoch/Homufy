@@ -51,6 +51,7 @@
 	var homufy_count = 0;
 	var cooldown = false;
 	var walpurgisnacht = false;
+	var autoHomu = false;
 	
 	//gotta know how big the window is
 	var windowHeight = 0;
@@ -100,6 +101,8 @@
 	
 	console.log('Done. ' + j + ' images loaded into cache.');
 	
+	
+
 
 	
 	$( document ).ready(function() {
@@ -123,23 +126,24 @@
 			}
 			
 		}
-
-		// let us START THE HELL
-		$( "#homufyStart" ).click(function() {
-			
+		
+		function kickIt() {
+	
 			homufy_count++;
 			if(homufy_count == 1)
 				$( "#survivalstrategy" ).fadeOut(500).queue(function() { $(this).remove(); });
 			
 			console.log("heat: " + homufy_count);
 			
-			if (homufy_count > 50) // if to much homura, destroy them.
-				walpurgisnacht = true;
-			if (homufy_count > 1000)
-				alert("Please stop.");
-			
-			if (walpurgisnacht == true)
-				begoneThot(); 
+			if(autoHomu != true) {
+				if (homufy_count > 50) // if to much homura, destroy them.
+					walpurgisnacht = true;
+				if (homufy_count > 1000)
+					alert("Please stop.");
+				
+				if (walpurgisnacht == true)
+					begoneThot(); 
+			}
 			
 			
 			//creates the div holding the images
@@ -228,6 +232,28 @@
 			var body = document.getElementsByTagName('body')[0];
 			body.appendChild(div);
 			div.appendChild(img);	
+	
+		}
+
+		// let us START THE HELL
+		
+		$( "#homufyStart" ).click(function() {
+		
+			if($('input[type="checkbox"]').prop("checked") == true)
+				autoHomu = true;
+			else if($('input[type="checkbox"]').prop("checked") == false)
+				autoHomu = false;
+			
+			if(autoHomu == true) {
+				setInterval(function() {
+					kickIt();
+				}, 1000);
+				$(this).remove();
+			} 
+			else
+				kickIt();
+			
+			
 			
 		});
 		
@@ -243,6 +269,7 @@
 Changelog:
 
 3.1
++ Auto Homu
 + Gave the background a little spice from <a href="http://pastelhomura.tumblr.com">pastelhomura</a>
 
 3.0
@@ -271,6 +298,7 @@ Changelog:
 
 <p id="credit">
 	<strong>
+		Auto Homu? <input type="checkbox"><br>
 		based off of <a href="http://www.cornify.com/">cornify</a> & inspired by <a href="http://sol--lux.tumblr.com/komaedafy">komaedafy</a>
 	</strong>
 </p>
