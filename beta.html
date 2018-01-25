@@ -276,6 +276,7 @@
 						kickIt();
 						if(homufy_count >= 200) {
 							clearInterval(theFuck);
+							$('input[type="checkbox"]').prop( "checked", false );
 							$( ".fling" ).css("position","relative");
 							$( "#loader" ).fadeOut(200).queue(function() { $( this ).remove() });
 						}
