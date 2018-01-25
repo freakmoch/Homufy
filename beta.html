@@ -52,12 +52,9 @@
 	}
 	
 	#loader {
-	}
-	
-	.fling {
 		position: absolute;
-		top: 0; left: 0;
-		margin: 0; padding: 0;
+		top: 0; left: 0; 
+		margin: 0; padding: 0; 
 		text-align: center;
 		background: #000 url('./img/road.gif') center no-repeat;
 		z-index: 999 !important;
@@ -155,8 +152,6 @@
 		function kickIt() {
 	
 			homufy_count++;
-			if(homufy_count == 1)
-				$( "#survivalstrategy" ).fadeOut(500).queue(function() { $(this).remove(); });
 			
 			console.log("heat: " + homufy_count);
 			
@@ -264,6 +259,9 @@
 		
 		$( "#homufyStart" ).click(function() {
 		
+			if(homufy_count == 0)
+				$( "#survivalstrategy" ).fadeOut(500).queue(function() { $(this).remove(); });
+		
 			if($('input[type="checkbox"]').prop("checked") == true)
 				autoHomu = true;
 			else if($('input[type="checkbox"]').prop("checked") == false)
@@ -276,9 +274,8 @@
 						kickIt();
 						if(homufy_count >= 200) {
 							clearInterval(theFuck);
-							$('input[type="checkbox"]').prop( "checked", false );
-							$( ".fling" ).css("position","relative");
-							$( "#loader" ).fadeOut(200).queue(function() { $( this ).remove() });
+							$('input[type="checkbox"]').prop( 'checked', false );
+							$( "#loader" ).hide();
 						}
 					}, 5);
 				}); 
@@ -297,8 +294,8 @@
 
 </head>
 <body>
+<div id="loader">i exist!</div>
 <div id="solvent"></div>
-<div id="loader"><div class="fling"></div></div>
 <pre style="position: absolute; top: 5px; padding-left: 20px;" id="survivalstrategy">
 Changelog:
 
