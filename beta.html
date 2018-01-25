@@ -277,6 +277,7 @@
 						kickIt();
 						if(homufy_count >= 200) {
 							clearInterval(theFuck);
+							$( ".fling" ).css("position","relative");
 							$( "#loader" ).fadeOut(200).queue(function() { $( this ).remove() });
 						}
 					}, 5);
