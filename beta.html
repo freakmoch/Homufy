@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<meta name='author' content='Muffy, doesntwork@seabird.me'>
+<meta name='keywords' content='homura akemi, homufy, silly'>
+<meta name='description' content='click on homuras face and multiple homuras appear before ye'>
+<meta name='subject' content='homura akemis face'>
+<meta name='language' content='EN'>
+<meta name='robots' content='index,follow'>
+<link rel='logo' type='image/png' href='http://git.seabird.me/Homufy/img/wtf.png'>
+<title>doushite madoka v3.1</title>
+	
+<style>
+	html {
+		margin: 0; padding: 0;
+		width: 100%;
+		height: 100%;
+		overflow-y: hidden;
+		color: #fff;
+		font-family: monospace;
+		background: #000 url('./img/hamus.png') no-repeat;
+		background-size: cover;
+		transition: background 1s; 
+	}
+	
+	body {
+		margin: 0; padding: 0;
+		top: -10px; left: -10px;
+		overflow-y: hidden;
+		transition: background 1s;
+	}
+		
+	#homufyStart img {
+		background: #fff;
+		padding: 15px;
+		border: 5px double #ccc;
+		border-radius: 0 15px;
+		margin-top: 15%; z-index: 995;
+	}
+	
+	#solvent {
+		position: absolute;
+		top 0; left 0;
+		margin: 0; padding: 0;
+		z-index: -1;
+		background: rgba(0,0,0,0.5);
+		width: 100%;
+		height: 100%;
+	}
+	
+	#loader {
+		position: relative;
+	}
+	
+	.fling {
+		position: absolute;
+		top: 0; left: 0;
+		margin: 0; padding: 0;
+		text-align: center;
+		background: #000 url('road.gif') center no-repeat;
+		z-index: 999 !important;
+		height: 100%;
+		width: 100%;
+	}
+	
+	a, a:hover, a:active, a:visited { color: #ff0; }
+	
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+	// originally by sol--lux & cornify(?)
+	// optimized a bit by freakmoch
+	
+	// counts
+	var homufy_count = 0;
+	var cooldown = false;
+	var walpurgisnacht = false;
+	var autoHomu = false;
+	var theFuck;
+	
+	//gotta know how big the window is
+	var windowHeight = 0;
+	var windowWidth = 0;
+
+	//the link to the dropbox folder/directory holding all your images
+	var db = "./img/";
+	
+	// all your images
+	var homuras = [
+		"avatar_be14cb6e8ae7_128.png",
+		"gfdgdfgdfg.png",
+		"tumblr_inline_mxh5uaXs5b1reyqvx.gif",
+		"tumblr_inline_mxl4jzxjZt1reyqvx.gif",
+		"tumblr_inline_mxl4k7Q6ln1reyqvx.gif",
+		"tumblr_inline_mxl51kkDYk1reyqvx.gif",
+		"tumblr_inline_mxqr0kAXSI1r21bz8.png",
+		"tumblr_inline_mz6lizmmi61rhrvt4.png",
+		"tumblr_inline_mzd9lwhami1s7i3b2.jpg",
+		"tumblr_m7dvmuXNQ11ryg654o1_500.jpg",
+		"tumblr_mpp1jzD9Dg1qm5kz7o1_500.png",
+		"tumblr_mvchs5cfkl1roj91ko1_1280.png",
+		"tumblr_mwg4lmnvao1sy8iyso1_500.png",
+		"tumblr_mx5gpgmU3y1shv6qqo1_400.png",
+		"tumblr_mx5leqmTYq1shv6qqo4_400.png",
+		"tumblr_mx5leqmTYq1shv6qqo8_400.png",
+		"tumblr_mxh2aeRUVn1s44sqco1_500.png",
+		"tumblr_mxkfkkr1zr1shc3j4o2_1280.png",
+		"tumblr_mxwxbtfo7q1qeipluo1_500.png",
+		"tumblr_mxza6lfrsu1si30aao1_500.png",
+		"tumblr_my4i2iyuru1sg18eeo1_500.png",
+		"tumblr_mymez8pOwx1rmuweto1_500.gif",
+		"tumblr_myti0tSQUS1rdo6zeo1_500.png",
+		"tumblr_mzk5p56eR91sjwhj0o1_500.png",
+		"tumblr_mzxg1vHml51t1gh90o2_1280.png",
+		"tumblr_n37r6h6hHu1qatjtso1_500.png",
+		"tumblr_static_tumblr_inline_mhniajtawg1qz4rgp.gif",
+		"tumblr_static_tumblr_mwlge3kzsq1sqri4do1_r3_500.png",
+		"tumblr_static_tumblr_mwlge3kzsq1sqri4do1_r3_500.png"
+		
+	];
+	
+	// lets preload images
+	var imgLoad = new Image();
+		
+	for( var j = 0 ; j < homuras.length; j++ ) { imgLoad.src = "" + db + homuras[j]; }
+	
+	console.log('Done. ' + j + ' images loaded into cache.');
+	
+	$( document ).ready(function() {
+		$( "#loader" ).hide();
+			
+		//gets your window height/width
+		windowHeight = $( window ).height();
+		windowWidth = $( window ).width();
+		
+			
+		console.log('Resolution: ' + windowHeight + "x" + windowWidth );
+		
+		//fades out images every second. clicking too much can still flood a page tho
+		function begoneThot() {
+			if(cooldown == false ) {
+				console.log("this should only run once");
+				setInterval(function() {
+					$( "#homufy" )
+						.fadeOut(200)
+						.queue(function() { $(this).remove(); });
+				}, 500);
+				cooldown = true;
+			}
+			
+		}
+		
+		function kickIt() {
+	
+			homufy_count++;
+			if(homufy_count == 1)
+				$( "#survivalstrategy" ).fadeOut(500).queue(function() { $(this).remove(); });
+			
+			console.log("heat: " + homufy_count);
+			
+			if(autoHomu != true) {
+				if (homufy_count > 50) // if to much homura, destroy them.
+					walpurgisnacht = true;
+				if (homufy_count > 1000)
+					alert("Please stop.");
+				
+				if (walpurgisnacht == true)
+					begoneThot(); 
+			}
+			
+			
+			//creates the div holding the images
+			var div = document.createElement('div'); div.id = "homufy";
+			div.style.position = 'fixed';
+			
+			var numType = 'px';
+			var heightRandom = Math.random()*.75;
+			var height = 0;
+			var width = 0;
+			var de = document.documentElement;
+
+			// estimates where each picture should go i guess
+			if (typeof(window.innerHeight) == 'number') {
+				windowHeight = window.innerHeight;
+				windowWidth = window.innerWidth;
+			} 
+			else if(de && de.clientHeight) {
+				windowHeight = de.clientHeight;
+				windowWidth = de.clientWidth;
+			} 
+			else {
+				numType = '%';
+				height = Math.round( height*100 )+'%';
+			}
+			
+			//div.onclick = homufy_add;
+			div.style.zIndex = -1;
+			div.style.outline = 0;
+			
+			
+			// more estimation ft random placement
+			if( homufy_count==15 ) {
+				div.style.top = Math.max( 0, Math.round( (windowHeight-530)/2 ) )  + 'px';
+				div.style.left = Math.round( (windowWidth-530)/2 ) + 'px';
+				div.style.zIndex = -5;
+			} else {
+				if( numType=='px' ) div.style.top = Math.round( windowHeight*heightRandom ) + numType;
+				else div.style.top = height;
+				div.style.left = Math.round( Math.random()*100 ) + '%';
+			}
+
+			
+			////////////////////////////////////////////
+			// CREATES IMAGES
+			
+			var img = document.createElement('img');
+			var currentTime = new Date();
+			var submitTime = currentTime.getTime();
+			var rNG = Math.floor( Math.random()*homuras.length);
+			var imgurl = "" + db + homuras[rNG] ;
+			
+			if(imgurl == "" + db + "undefined") { 
+				console.log("Entropy!");
+				imgurl == 0 
+			};
+			
+			img.setAttribute('src', imgurl);
+
+			////////////////////////////////////////////
+			
+			// cool transitions when you hover over images
+			var ease = "all .1s linear";
+			div.style.WebkitTransition = ease;
+			div.style.WebkitTransform = "rotate(1deg) scale(1.01,1.01)";
+			div.style.transition = "all .1s linear";
+			div.onmouseover = function() {
+				var size = 1+Math.round(Math.random()*10)/100;
+				var angle = Math.round(Math.random()*20-10);
+				var result = "rotate("+angle+"deg) scale("+size+","+size+")";
+				this.style.transform = result;
+				this.style.WebkitTransform = result;
+			}
+			div.onmouseout = function() {
+				var size = .9+Math.round(Math.random()*10)/100;
+				var angle = Math.round(Math.random()*6-3);
+				var result = "rotate("+angle+"deg) scale("+size+","+size+")";
+				this.style.transform = result;	
+				//this.style['-webkit-transform'] = result;
+				//this.style.webkitTransform = result;
+				this.style.WebkitTransform = result;
+				//this.style.MozTransform = result;
+			}
+
+			//actually makes the elements
+			var body = document.getElementsByTagName('body')[0];
+			body.appendChild(div);
+			div.appendChild(img);	
+	
+		}
+
+		// let us START THE HELL
+		
+		$( "#homufyStart" ).click(function() {
+		
+			if($('input[type="checkbox"]').prop("checked") == true)
+				autoHomu = true;
+			else if($('input[type="checkbox"]').prop("checked") == false)
+				autoHomu = false;
+			
+			if(autoHomu == true) {
+				 $( "#loader" ).fadeIn(1000).queue(function(){
+					theFuck = setInterval(function() {
+						$('input[type="checkbox"]').prop('disabled', true);
+						kickIt();
+						if(homufy_count >= 200) {
+							clearInterval(theFuck);
+							$( "#loader" ).fadeOut(200).queue(function() { $( this ).remove() });
+						}
+					}, 5);
+				}); 
+			} 
+			else
+				kickIt();
+			
+			
+			
+		});
+		
+	});
+	
+	
+</script>
+
+</head>
+<body>
+<div id="solvent"></div>
+<div id="loader"><div class="fling"></div></div>
+<pre style="position: absolute; top: 5px; padding-left: 20px;" id="survivalstrategy">
+Changelog:
+
+3.1
++ Gave the background a little spice from <a href="http://pastelhomura.tumblr.com">pastelhomura</a>
+
+3.0
++ images now stay for 50 clicks, then start to disappear
++ added css to make the page look nicer.
++ added changelog because this changes sometimes.
++ walpurgisnacht
+
+2.0
++ rehosted Homufy on github
++ optimized code to load images and use jquery
++ images dissapear every second
+
+1.0
++ created Homufy and hosted it on <a href="http://homufy.tumblr.com/">tumblr</a>.
++ just copy-pasted komaedafy and replaced images with homura
+</pre>
+<center>
+<p>
+<a href="#homu" id="homufyStart">
+<img src="./img/wtf.png">
+</a>
+</p>
+
+<p id="error"></p>
+
+<p id="credit">
+	<strong>
+		Auto Homu? <input type="checkbox"><br>
+		based off of <a href="http://www.cornify.com/">cornify</a> & inspired by <a href="http://sol--lux.tumblr.com/komaedafy">komaedafy</a>
+	</strong>
+</p>
+
+</center>
+</body>
+</html>
